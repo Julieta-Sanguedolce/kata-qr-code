@@ -1,8 +1,45 @@
-import { sum } from "./skeleton";
+import { toFile } from "qrcode";
 
-// Call your function of interest, here, instead of sum.
-//You can use vscode's "Debug main.ts" launcher to debug, starting here.
+const websitesToGenerate: string[] = [
+    "https://www.youtube.com/@codeorg",
+    "https://www.youtube.com/@CoderbyteDevelopers",
+    "https://www.youtube.com/@Codesmith",
+    "https://www.youtube.com/@craigndave",
+    "https://www.youtube.com/@decomplexify",
+    "https://www.youtube.com/@Fireship",
+    "https://www.youtube.com/@freecodecamp",
+    "https://www.youtube.com/@funfunfunction",
+    "https://www.youtube.com/@KevinPowell",
+    "https://www.youtube.com/@NetNinja",
+    "https://www.youtube.com/@TraversyMedia",
+    "https://www.youtube.com/@WesBos",
+];
 
-const answer = sum(10, 200);
+createAllQRCodes(websitesToGenerate);
 
-console.log({ answer });
+function createAllQRCodes(websitesToGenerate: string[]): void {
+    for (let websiteURL of websitesToGenerate) {
+        createQRCode(websiteURL);
+    }
+}
+
+function createQRCode(websiteURL: string): void {
+    let fileName: string = websiteURL.split("@")[1];
+
+    toFile(
+        `./outputImages/qrcode_${fileName}.png`,
+        websiteURL,
+        {
+            type: "png",
+            errorCorrectionLevel: "H",
+            scale: 10,
+        },
+        (error) => {
+            if (error) {
+                console.error("Error generating QR code:", error);
+            } else {
+                console.log("QR code generated successfully!");
+            }
+        }
+    );
+}
